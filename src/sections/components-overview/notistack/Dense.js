@@ -1,0 +1,34 @@
+'use client';
+
+import { useState } from 'react';
+
+// material-ul
+import { Button, Checkbox } from '@mui/material';
+
+// third-party
+import { enqueueSnackbar } from 'notistack';
+
+// project import
+import MainCard from 'components/MainCard';
+import { handlerDense } from 'api/snackbar';
+
+// ==============================|| NOTISTACK - DENSE ||============================== //
+
+export default function Dense() {
+  const [checked, setChecked] = useState(false);
+
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+    handlerDense(event.target.checked);
+  };
+
+  return (
+    <MainCard title="Dense">
+      <Checkbox checked={checked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />
+      Dense margins
+      <Button variant="outlined" fullWidth sx={{ marginBlockStart: 2 }} onClick={() => enqueueSnackbar('Your notification here')}>
+        Show snackbar
+      </Button>
+    </MainCard>
+  );
+}
