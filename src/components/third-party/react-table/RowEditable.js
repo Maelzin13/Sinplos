@@ -37,12 +37,11 @@ const RowEditable = ({ getValue: initialValue, row, column: { id, columnDef }, t
   const ShowStatus = (value) => {
     switch (value) {
       case 'Complicated':
-        return <Chip color="error" label="Complicated" size="small" variant="light" />;
-      case 'Relationship':
-        return <Chip color="success" label="Relationship" size="small" variant="light" />;
+        return <Chip color="error" label="Excluido" size="small" variant="light" />;
+
       case 'Single':
       default:
-        return <Chip color="info" label="Single" size="small" variant="light" />;
+        return <Chip color="info" label="Editado" size="small" variant="light" />;
     }
   };
 

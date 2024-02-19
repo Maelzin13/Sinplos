@@ -14,24 +14,7 @@ function createData(name, calories, fat, carbs, protein, price) {
     fat,
     carbs,
     protein,
-    price,
-    history: [
-      {
-        date: '3390337',
-        customerId: '138',
-        amount: 'R$ 10.000,00'
-      },
-      {
-        date: '0',
-        customerId: '0',
-        amount: 'R$ --'
-      },
-      {
-        date: '0',
-        customerId: '0',
-        amount: 'R$ --'
-      }
-    ]
+    price
   };
 }
 
@@ -59,7 +42,7 @@ function Row({ row }) {
         <TableCell colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             {open && (
-              <Box sx={{ py: 3, pl: { xs: 2, sm: 4, md: 4 } }}>
+              <Box sx={{ pl: { xs: 20, sm: 20, md: 20 } }}>
                 <TableContainer>
                   <MainCard content={false}>
                     <Table>
@@ -80,7 +63,7 @@ Row.propTypes = {
   row: PropTypes.object
 };
 
-const rows = [createData('10.122.8202.8517.0052', 'MANUTENÇÃO DE SERVIÇOS ADMINISTRATIVOS GERAIS-SES-DF', 'R$ 13.000,00', 'R$ 10.000,00')];
+const rows = [createData('')];
 
 // ==============================|| MUI TABLE - COLLAPSIBLE ||============================== //
 
@@ -90,7 +73,7 @@ export default function TableCadastro() {
       <Box sx={{ py: 2, pl: { xs: 4, sm: 4, md: 4 } }}>
         <TableContainer>
           <Table aria-label="collapsible table">
-            <TableHead>
+            {/* <TableHead>
               <TableRow>
                 <TableCell sx={{ pl: 9 }} />
                 <TableCell>PT</TableCell>
@@ -98,7 +81,7 @@ export default function TableCadastro() {
                 <TableCell>Media de Execução</TableCell>
                 <TableCell>Despesa Estimado</TableCell>
               </TableRow>
-            </TableHead>
+            </TableHead> */}
             <TableBody>
               {rows.map((row) => (
                 <Row key={row.name} row={row} />

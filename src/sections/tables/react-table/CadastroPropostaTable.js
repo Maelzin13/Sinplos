@@ -1,29 +1,16 @@
 'use client';
 
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
-
-// material-ui
+import { useState, useEffect } from 'react';
 import { Stack, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
-
-// third-party
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
-
-// project-import
-import ScrollX from 'components/ScrollX';
 import MainCard from 'components/MainCard';
 import IconButton from 'components/@extended/IconButton';
 import { RowEditable } from 'components/third-party/react-table';
-
-import makeData from 'data/react-table';
-
-// assets
 import { CloseOutlined, EditTwoTone, SendOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const EditAction = ({ row, table }) => {
-  console.log('Table options:', table?.options);
   const meta = table?.options?.meta;
-  console.log('Meta:', meta);
   const setSelectedRow = (e) => {
     meta?.setSelectedRow((old) => ({
       ...old,
@@ -41,6 +28,13 @@ const EditAction = ({ row, table }) => {
       meta.setData(newData);
     }
   };
+
+  // const handleDeleteRow = () => {
+  //   if (Array.isArray(meta.data)) {
+  //     const updatedData = meta.data.map((rowData) => (rowData.id === row.id ? { ...rowData, excluido: true } : rowData));
+  //     meta.setData(updatedData);
+  //   }
+  // };
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
@@ -78,6 +72,12 @@ EditAction.propTypes = {
 function ReactTable({ columns, data, setData }) {
   const [originalData, setOriginalData] = useState(() => [...data]);
   const [selectedRow, setSelectedRow] = useState({});
+  useEffect(() => {
+    table.setOptions({
+      ...table.options,
+      debugTable: true
+    });
+  }, []);
 
   const table = useReactTable({
     data,
@@ -127,34 +127,32 @@ function ReactTable({ columns, data, setData }) {
 
   return (
     <MainCard content={false}>
-      <ScrollX>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id} {...header.column.columnDef.meta}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </ScrollX>
+      <TableContainer size="small">
+        <Table>
+          <TableHead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableCell key={header.id} {...header.column.columnDef.meta}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableHead>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </MainCard>
   );
 }
@@ -168,111 +166,144 @@ ReactTable.propTypes = {
 // ==============================|| REACT TABLE - EDITABLE ROW ||============================== //
 
 const CadastroPropostaTable = () => {
-  const [data, setData] = useState(() => makeData(5));
+  const [data, setData] = useState([
+    {
+      id: 1,
+      tipoDespesa: 'Reforma',
+      gnd: '339039',
+      fonte: '101',
+      visits: 'REFORMA DE UNIDADES BÁSICAS DE SAÚDE-SES-DISTRITO FEDERAL',
+      apr: 'SINFRA',
+      status: '101',
+      age: 'Reforma da Unidade Básica de Saúde nº 07 - Gama.',
+      previsaoReajuste: 'NA',
+      memoriaCalculo: 'NA',
+      vigenciaValorUnitario: 'NA',
+      propostaPLOA: 'NA',
+      justificativa: 'Não informada',
+      valor: '5.694.451,06',
+      observacao: 'Valor atualizado de acordo com orçamento da reforma.'
+    }
+  ]);
   // const [originalData, setOriginalData] = useState(() => [...data]);
+
+  const columns = [
+    {
+      id: 'id',
+      title: 'Id',
+      header: '#',
+      accessorKey: 'id',
+      dataType: 'text',
+      enableColumnFilter: false,
+      enableGrouping: false
+    },
+    {
+      header: 'Tipo de Despesa',
+      accessorKey: 'tipoDespesa',
+      dataType: 'text'
+    },
+    {
+      header: 'GND',
+      accessorKey: 'gnd',
+      dataType: 'text'
+    },
+    {
+      header: 'Fonte',
+      accessorKey: 'fonte',
+      dataType: 'text',
+      meta: {
+        className: 'cell-right'
+      }
+    },
+    {
+      header: 'Descritivo Completo do Item /  Despesa',
+      accessorKey: 'visits',
+      dataType: 'text',
+      meta: {
+        className: 'cell-right',
+        width: 300
+      }
+    },
+    {
+      header: 'APR',
+      accessorKey: 'apr',
+      dataType: 'text'
+    },
+    {
+      header: 'status',
+      accessorKey: 'status',
+      dataType: 'select'
+    },
+    {
+      header: 'N° de  Contrato e Empresa / Código SES',
+      accessorKey: 'age',
+      dataType: 'text'
+    },
+    {
+      header: 'Previsão de Reajuste',
+      accessorKey: 'previsaoReajuste',
+      dataType: 'text'
+    },
+    {
+      header: 'Memória de Cálculo',
+      accessorKey: 'memoriaCalculo',
+      dataType: 'text'
+    },
+    {
+      header: 'Vigência / Valor Unitário',
+      accessorKey: 'vigenciaValorUnitario',
+      dataType: 'text'
+    },
+    {
+      header: 'Proposta PLOA (Despesa Estimada)',
+      accessorKey: 'propostaPLOA',
+      dataType: 'text'
+    },
+    {
+      header: 'Justificativa',
+      accessorKey: 'justificativa',
+      dataType: 'text'
+    },
+    {
+      header: 'Valor',
+      accessorKey: 'valor',
+      dataType: 'text'
+    },
+    {
+      header: 'Observação',
+      accessorKey: 'observacao',
+      dataType: 'text'
+    },
+    {
+      header: 'Actions',
+      id: 'edit',
+      cell: EditAction,
+      meta: {
+        className: 'cell-center'
+      }
+    }
+  ];
 
   const addNewRow = () => {
     const newRow = {
-      id: data.length + 1, // Assuming ids are incremental
-      fullName: '', // Fill in default values for other fields as needed
-      age: '',
+      id: data.length + 1,
+      tipoDespesa: '',
+      gnd: '',
+      fonte: '',
       visits: '',
-      status: ''
+      apr: '',
+      status: '',
+      age: '',
+      previsaoReajuste: '',
+      memoriaCalculo: '',
+      vigenciaValorUnitario: '',
+      propostaPLOA: '',
+      justificativa: '',
+      valor: '',
+      observacao: ''
     };
     setData((prevData) => [...prevData, newRow]);
   };
-
-  const columns = useMemo(
-    () => [
-      {
-        id: 'id',
-        title: 'Id',
-        header: '#',
-        accessorKey: 'id',
-        dataType: 'text',
-        enableColumnFilter: false,
-        enableGrouping: false,
-        meta: {
-          className: 'cell-center'
-        }
-      },
-      {
-        header: 'Tipo de Despesa',
-        accessorKey: 'fullName',
-        dataType: 'text'
-      },
-      {
-        header: 'GND',
-        accessorKey: 'fullName',
-        dataType: 'text'
-      },
-      {
-        header: 'Fonte',
-        accessorKey: 'age',
-        dataType: 'text',
-        meta: {
-          className: 'cell-right'
-        }
-      },
-      {
-        header: 'Despesa',
-        accessorKey: 'visits',
-        dataType: 'text',
-        meta: {
-          className: 'cell-right'
-        }
-      },
-      {
-        header: 'APR',
-        accessorKey: 'status',
-        dataType: 'select'
-      },
-      {
-        header: 'status',
-        accessorKey: 'status',
-        dataType: 'select'
-      },
-      {
-        header: 'N° de  Contrato e Empresa / Código SES',
-        accessorKey: 'age',
-        dataType: 'text'
-      },
-      {
-        header: 'Previsão de Reajuste',
-        accessorKey: 'age',
-        dataType: 'text'
-      },
-      {
-        header: 'Memória de Cálculo',
-        accessorKey: 'age',
-        dataType: 'text'
-      },
-      {
-        header: 'Vigência / Valor Unitário',
-        accessorKey: 'age',
-        dataType: 'text'
-      },
-      {
-        header: 'Proposta PLOA (Despesa Estimada)',
-        accessorKey: 'age',
-        dataType: 'text'
-      },
-      {
-        header: 'Justificativa',
-        accessorKey: 'age',
-        dataType: 'text'
-      },
-      {
-        header: 'Actions',
-        id: 'edit',
-        cell: EditAction,
-        meta: {
-          className: 'cell-center'
-        }
-      }
-    ],
-    []
-  );
 
   return (
     <div>

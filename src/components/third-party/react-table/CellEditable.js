@@ -101,6 +101,30 @@ const CellEditable = ({ getValue: initialValue, row: { index }, column: { id, co
         </>
       );
       break;
+    // case 'select':
+    //   element = (
+    //     <>
+    //       <Select
+    //         labelId="editable-select-status-label"
+    //         sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 }, svg: { display: 'none' } }}
+    //         id="editable-select-status"
+    //         value={value}
+    //         onChange={onChange}
+    //         onBlur={onBlur}
+    //       >
+    //         <MenuItem value="Complicated">
+    //           <Chip color="error" label="Complicated" size="small" variant="light" />
+    //         </MenuItem>
+    //         <MenuItem value="Relationship">
+    //           <Chip color="success" label="Relationship" size="small" variant="light" />
+    //         </MenuItem>
+    //         <MenuItem value="Single">
+    //           <Chip color="info" label="Single" size="small" variant="light" />
+    //         </MenuItem>
+    //       </Select>
+    //     </>
+    //   );
+    //   break;
     case 'select':
       element = (
         <>
@@ -112,14 +136,11 @@ const CellEditable = ({ getValue: initialValue, row: { index }, column: { id, co
             onChange={onChange}
             onBlur={onBlur}
           >
-            <MenuItem value="Complicated">
-              <Chip color="error" label="Complicated" size="small" variant="light" />
+            <MenuItem value="Excluido">
+              <Chip color="error" label="Excluido" size="small" variant="light" />
             </MenuItem>
-            <MenuItem value="Relationship">
-              <Chip color="success" label="Relationship" size="small" variant="light" />
-            </MenuItem>
-            <MenuItem value="Single">
-              <Chip color="info" label="Single" size="small" variant="light" />
+            <MenuItem value="Editado">
+              <Chip color="info" label="Editado" size="small" variant="light" />
             </MenuItem>
           </Select>
         </>

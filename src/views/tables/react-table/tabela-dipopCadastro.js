@@ -36,7 +36,6 @@ import {
   sortingFns
 } from '@tanstack/react-table';
 import { compareItems, rankItem } from '@tanstack/match-sorter-utils';
-import MainCard from 'components/MainCard';
 import ScrollX from 'components/ScrollX';
 import {
   EmptyTable,
@@ -50,7 +49,8 @@ import {
 } from 'components/third-party/react-table';
 import IconButton from 'components/@extended/IconButton';
 import { DownOutlined, GroupOutlined, RightOutlined, StopOutlined, UngroupOutlined } from '@ant-design/icons';
-import TableCadastro from '../mui-table/tabelaCadastro';
+import CadastroPropostaTable from 'sections/tables/react-table/CadastroPropostaTable';
+// import TableCadastro from '../mui-table/tabelaCadastro';
 
 export const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -172,7 +172,7 @@ function ReactTable({ defaultColumns, data, setData }) {
   );
 
   return (
-    <MainCard content={false}>
+    <>
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         spacing={2}
@@ -284,9 +284,14 @@ function ReactTable({ defaultColumns, data, setData }) {
                       </>
                     </DraggableRow>
                     {row.getIsExpanded() && !row.getIsGrouped() && (
-                      <TableRow sx={{ bgcolor: backColor, '&:hover': { bgcolor: `${backColor} !important` } }}>
+                      <TableRow
+                        sx={{
+                          bgcolor: backColor,
+                          '&:hover': { bgcolor: `${backColor} !important` }
+                        }}
+                      >
                         <TableCell colSpan={row.getVisibleCells().length + 2}>
-                          <TableCadastro />
+                          <CadastroPropostaTable />
                         </TableCell>
                       </TableRow>
                     )}
@@ -314,7 +319,7 @@ function ReactTable({ defaultColumns, data, setData }) {
           />
         </Box>
       </ScrollX>
-    </MainCard>
+    </>
   );
 }
 
@@ -333,21 +338,22 @@ const TabelaDIPOPCadastro = () => {
       id: 1,
       mapaEstrategico: {
         programaTrabalho: '10.122.8202.8517.0052',
-        medidaExecucao: 'Manutenção de Serviços Administrativos Gerais-SES-Distrito Federal'
+        medidaExecucao: 'MANUTENÇÃO DE SERVIÇOS ADMINISTRATIVOS GERAIS-SES-DF'
+      },
+      diretoria: {
+        medida: 'R$ 13.000.000,00',
+        despesa: 'R$ 10.000.000,00'
       }
     },
     {
       id: 2,
       mapaEstrategico: {
         programaTrabalho: '10.302.6202.6016.0001',
-        medidaExecucao: 'Imento de aparelhos de órteses e Próteses-Ambulatorios-SES-Distrito Federal'
-      }
-    },
-    {
-      id: 3,
-      mapaEstrategico: {
-        programaTrabalho: '10.302.6202.6016.4216',
-        medidaExecucao: 'Imento de aparelhos de órteses e Próteses-Ambulatorios-SES-Distrito Federal'
+        medidaExecucao: 'FORNECIMENTO DE APARELHOS DE ÓRTESE E PRÓTESES-AMBULATORIAIS-SES-DF'
+      },
+      diretoria: {
+        medida: 'R$ 14.000.000,00',
+        despesa: 'R$ 9.000.000,00'
       }
     }
   ];
@@ -395,14 +401,14 @@ const TabelaDIPOPCadastro = () => {
         columns: [
           {
             id: 'programaTrabalho',
-            header: 'Programa de Trabalho',
+            header: 'PT',
             accessorKey: 'mapaEstrategico.programaTrabalho',
             dataType: 'text',
             enableGrouping: false
           },
           {
             id: 'medidaExecucao',
-            header: 'DESCRIÇÃO',
+            header: 'Descroção PT',
             accessorKey: 'mapaEstrategico.medidaExecucao',
             dataType: 'text',
             enableGrouping: false
@@ -417,8 +423,15 @@ const TabelaDIPOPCadastro = () => {
         enableGrouping: true,
         columns: [
           {
+            id: 'medida',
+            header: 'Medida de Execução',
+            accessorKey: 'diretoria.medida',
+            dataType: 'text',
+            enableGrouping: false
+          },
+          {
             id: 'despesa',
-            header: '',
+            header: 'Despesa Estimado',
             accessorKey: 'diretoria.despesa',
             dataType: 'text',
             enableGrouping: false
